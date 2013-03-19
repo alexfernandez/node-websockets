@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+
+<title>reveal.js - The HTML Presentation Framework</title>
+
+<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+<meta name="author" content="Hakim El Hattab">
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="stylesheet" href="css/reveal.min.css">
+<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+<!-- For syntax highlighting -->
+<link rel="stylesheet" href="lib/css/zenburn.css">
+
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+</script>
+
+<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+		<section>
+			<h1>node + websockets</h1>
+			<div>
+				Una pareja bien avenida
+			</div>
+			<div>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/f/f1/Train_coupling.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+		</section>
+		<section>
+			<h2>¿Quién es este tío?</h2>
+			<div class="fragment">
+				Alejandro Fernández
+				<br>
+				<img src="https://en.gravatar.com/userimage/17239035/da16d19442f35218a03f54af6525b183.jpg?size=200">
+			<div>
+			<div class="fragment">
+				Programador / Desarrollador / Ingeniero de software / Sysadmin / DevOps / Cacharreador
+			</div>
+			<br>
+			<div class="fragment">
+				Actualmente en MediaSmart Mobile
+			</div>
+			<br>
+			<div class="fragment">
+				alejandrofer, alexfernandez, @pinchito
+			</div>
+		</section>
+		<section>
+			<h2>Node.js</h2>
+			<div class="fragment">
+				JavaScript fue pensado para correr en el navegador…
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/5/58/Bundesarchiv_Bild_183-11500-0300%2C_Warnem%C3%BCnde%2C_Segelschulschiff_%22Wilhelm_Pieck%22%2C_Indienststellung.jpg" style="max-height: 50.0%;max-width: 50.0%;">
+			</div>
+			<div class="fragment">
+				"Tecnología cliente" corriendo en el servidor…
+			</div>
+			<br>
+			<div class="fragment">
+				¡Herejía!
+			</div>
+		</section>
+		<section>
+			<h2>Evolución en servidores web</h2>
+			<div class="fragment">
+				Apache: multi-hilo / multi-proceso
+				<img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Apache_chieff_Geronimo_%28right%29_and_his_warriors_in_1886.jpg" style="max-width: 30.0%;max-height: 30.0%; vertical-align: middle;">
+			</div>
+			<div class="fragment">
+				<img src="http://upload.wikimedia.org/wikipedia/commons/2/21/%22A_group_picture_showing_some_of_the_men_working_at_Norris_Dam.%22_-_NARA_-_532718.jpg" style="max-width: 30.0%;max-height: 30.0%; vertical-align: middle;">
+				<span style="line-height: 1.2em;letter-spacing: -0.02em;">nginx: master + workers</span>
+			</div>
+			<div class="fragment">
+				Tornado, node.js: asíncronos
+				<img src="http://upload.wikimedia.org/wikipedia/commons/2/28/Tornado_on_the_ground._Near_Scottsbluff%2C_Nebraska_-_NARA_-_283872.jpg" style="max-width: 30.0%;max-height: 30.0%; vertical-align: middle;">
+			</div>
+		</section>
+		<section>
+			<h2>Programación Funcional al poder</h2>
+			<div class="fragment">
+				Continuaciones, clausuras, filtros, lambdas…
+			</div>
+			<br>
+			<div class="fragment">
+				JavaScript es en realidad ¡un dialecto de Lisp!
+			</div>
+			<pre class="fragment">        (define factorial
+		  (lambda (n)
+			(if (= n 0) 1
+			  (* n (factorial (- n 1))))))</pre>
+			<div class="fragment">
+				(para ser exactos, Scheme)
+			</div>
+			<br>
+			<div class="fragment">
+				…disfrazado de Java (o lo que es lo mismo, C)
+			</div>
+			<br>
+			<div class="fragment">
+				¿Te sigue pareciendo <i>cool</i>?
+			</div>
+		</section>
+		<section>
+			<h2>Procesamiento asíncrono</h2>
+			<div class="fragment">
+				Función como parámetro (<i>continuation-passing style</i>)
+			</div>
+			<br>
+			<div class="fragment">
+				Callbacks: sin bloqueos, sin <i>polling</i>
+			</div>
+			<br>
+			<div class="fragment">
+				¡Mantén esa CPU ocupada!
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/e/e1/Tesla_polyphase_AC_500hp_generator_at_1893_exposition.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+		</section>
+		<section>
+			<h2>WebSockets</h2>
+			<div class="fragment">
+				Una tecnología bastarda en HTML5
+			</div>
+			<div class="fragment">
+				(hija ilegítima de la IETF y la W3C)
+			</div>
+			<br>
+			<div class="fragment">
+				TCP/IP es <i>full duplex</i>: recibe y envía
+			</div>
+			<br>
+			<div class="fragment">
+				HTML es <i>half-duplex</i>: petición, respuesta
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/e/e9/Portable_radio_SCR536.png" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+		</section>
+		<section>
+			<h2>WebSockets al Rescate</h2>
+			<div class="fragment">
+				Los webSockets recuperan la comunicación a dos bandas
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/5/5c/Derby_Road_-_Freightliner_66572_passing_66538.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+			<div class="fragment">
+				El servidor también puede iniciar una conversación
+			</div>
+			<br>
+			<div class="fragment">
+				¡Se acabó el <i>polling</i>!
+			</div>
+		</section>
+		<section>
+			<h2>Sobrecargando el puerto 80</h2>
+			<div class="fragment">
+				¿Por qué no usar sockets TCP/IP?
+			</div>
+			<br>
+			<div class="fragment">
+				Para atravesar el firewall
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/c/c1/Bundesarchiv_Bild_183-1990-0105-029%2C_Berlin%2C_Loch_in_Mauer_am_Reichstag.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+			<div class="fragment">
+				<i>Fail fast</i>! o <i>long polling</i>
+			</div>
+		</section>
+		<section>
+			<h2>El encuentro</h2>
+			<div>
+				<img src="http://payingattentiontothesky.files.wordpress.com/2011/05/einstein-and-godel.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+			<div class="fragment">
+				WebSockets en el cliente y el servidor
+			</div>
+			<br>
+			<div class="fragment">
+				Rendimiento e inmediatez
+			</div>
+			<br>
+			<div class="fragment">
+				Baja latencia
+			</div>
+		</section>
+		<section>
+			<h2>Retos ingenieriles</h2>
+			<div>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/2/28/Brooklyn_Bridge_New_York_det.4a18745u.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+			</div>
+			<div class="fragment">
+				Un número absurdo de peticiones concurrentes
+			</div>
+			<br>
+			<div class="fragment">
+				1000 req/s ~ 5000 req/s por core
+			</div>
+			<br>
+			<div class="fragment">
+				100K, 250K, 1M clientes
+			</div>
+		</section>
+		<section>
+			<h2>Aplicaciones</h2>
+			<div class="fragment">
+				Actualizaciones en tiempo real
+			</div>
+			<div class="fragment">
+				Domótica remota
+			</div>
+			<div class="fragment">
+				Control remoto de vehículos
+			</div>
+			<div class="fragment">
+				Juegos multijugador
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/e/e9/Bundesarchiv_Bild_183-W0224-0007%2C_Berlin%2C_Volkspark_Friedrichshain%2C_Tischtennis.jpg" style="font-weight: 400;line-height: 1.2em;text-align: center;color: rgb(238,238,238);font-size: 36.0px;letter-spacing: -0.02em;max-width: 50.0%;max-height: 50.0%;">
+			</div>
+		</section>
+		<section>
+			<h2>Más aplicaciones</h2>
+			<div class="fragment">
+				Control de flotas
+			</div>
+			<br>
+			<div class="fragment">
+				Internet of things
+				<br>
+				(Pachube&nbsp;⇨ Cosm)
+				<br>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/d/d4/SwarmRobot_org.jpg" style="max-width: 50.0%;max-height: 50.0%;letter-spacing: -0.02em;">
+			</div>
+			<div class="fragment">
+				…y por qué no, un chat.
+			</div>
+		</section>
+		<section>
+			<h2 style="">ECOSISTEMA</h2>
+			<div class="fragment">
+				<img src="http://upload.wikimedia.org/wikipedia/commons/9/96/YellowstoneBears.jpg" style="max-width: 50.0%;max-height: 50.0%;">
+				<br>
+				<code>npm</code> rules!
+			</div>
+			<br>
+			<div class="fragment">
+				Opción popular: socket.io (Cliente + servidor)
+			</div>
+			<br>
+			<div class="fragment">
+				Opción básica: websocket
+			</div>
+		</section>
+		<section>
+			<h2>Trucos</h2>
+			<div>
+				<img src="http://upload.wikimedia.org/wikipedia/commons/1/14/HandCuffHarryHoudini.jpg" style="max-width: 30.0%;max-height: 30.0%;">
+			</div>
+			<div class="fragment">
+				Compartir código entre cliente y servidor<br>
+			</div>
+			<br>
+			<div class="fragment">
+				Aumentar número de ficheros abiertos
+			</div>
+			<br>
+			<div class="fragment">
+				Desactivar el recolector de basura
+			</div>
+			<br>
+			<div class="fragment">
+				Pruebas de carga continuas
+			</div>
+		</section>
+		<section>
+			<h1>STOP</h1>
+			<h2 class="fragment">Demo Time!</h2>
+			<div class="fragment">
+				<img src="http://24.media.tumblr.com/tumblr_ma35hbtIyA1rd46l5o1_500.jpg">
+			</div>
+		</section>
+		<section>
+			<h2>¡Anímate!</h2>
+			<div>
+				<img src="http://www.twotsi.com/pdata/XAPP-1285118349-fat-nun.jpg" style="max-width: 40.0%;max-height: 40.0%;">
+			</div>
+			<div class="fragment">
+				Pierde el miedo a cacharrear
+			</div>
+			<div class="fragment">
+				Empieza a probar cosas
+			</div>
+			<div class="fragment">
+				Busca ayuda (casi toda en inglés)
+			</div>
+			<div class="fragment">
+				¡Practica el inglés!
+			</div>
+			<div class="fragment">
+				Pregunta en foros / StackOverflow
+			</div>
+			<div class="fragment">
+				Cúrrate los detalles
+			</div>
+		</section>
+		<section>
+			<h2>Créditos</h2>
+			<div style="margin: 10.0px;">
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:Train_coupling.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">
+							http://commons.wikimedia.org/wiki/File:%22A_group_picture_showing_some_of_the_men_working_at_Norris_Dam.%22_-_NARA_-_532718.jpg
+						</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">
+							https://commons.wikimedia.org/wiki/File:Apache_chieff_Geronimo_(right)_and_his_warriors_in_1886.jpg
+						</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-11500-0300,_Warnem%C3%BCnde,_Segelschulschiff_%22Wilhelm_Pieck%22,_Indienststellung.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<a href="http://commons.wikimedia.org/wiki/File:Spray_water-cooling_plant_for_condensing_engines_(Rankin_Kennedy,_Modern_Engines,_Vol_IV).jpg" style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:Tesla_polyphase_AC_500hp_generator_at_1893_exposition.jpg</a>
+					<font color="#13daec" style="font-size: 14.0px;">&nbsp;</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:Portable_radio_SCR536.png</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://commons.wikimedia.org/wiki/File:Derby_Road_-_Freightliner_66572_passing_66538.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://payingattentiontothesky.com/2011/05/13/reading-selections-from-the-god-of-the-mathematicians-by-david-p-goldman/</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://cs.wikipedia.org/wiki/Soubor:Brooklyn_Bridge_New_York_det.4a18745u.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-W0224-0007,_Berlin,_Volkspark_Friedrichshain,_Tischtennis.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:SwarmRobot_org.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://flaggedrevs.labs.wikimedia.org/wiki/File:YellowstoneBears.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:Bundesarchiv_Bild_183-1990-0105-029,_Berlin,_Loch_in_Mauer_am_Reichstag.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://en.wikipedia.org/wiki/File:HandCuffHarryHoudini.jpg</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://thekelayahobjective.tumblr.com/</span>
+					</font>
+				</div>
+				<div style="text-align: left;line-height: 80.0%;">
+					<span style="font-size: 14.0px;">Fuente:&nbsp;</span>
+					<font color="#13daec">
+						<span style="font-size: 14.0px;">http://www.twotsi.com/pages.php?word=immense%20nun%20papal%20visit&amp;act=show</span>
+					</font>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+	controls: true,
+	progress: true,
+	history: true,
+	center: true,
+
+	theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+	transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+	// Optional libraries used to extend on reveal.js
+	dependencies: [
+		{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+		{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+		{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+		{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+		{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+		{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+	]
+});
+
+</script>
+
+</body>
+</html>
