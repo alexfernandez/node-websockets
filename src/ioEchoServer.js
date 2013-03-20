@@ -14,7 +14,6 @@ var server = io.listen(port);
 
 server.sockets.on('connection', function (socket)
 {
-	console.log(JSON.stringify(socket));
 	console.log('Accepted connection for %s from %s', request.resource, connection.remoteAddress);
 	socket.on('message', function(message)
 	{
