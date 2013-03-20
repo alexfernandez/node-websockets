@@ -7,8 +7,8 @@
 var WebSocketClient = require('websocket').client;
 
 var server = 'localhost:1771';
-var concurrency = 10;
-var requestsSecond = 10;
+var concurrency = 3000;
+var requestsSecond = 1;
 var secondsMeasured = 5;
 
 var latency = new function()
