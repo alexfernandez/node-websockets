@@ -7,7 +7,7 @@
 var WebSocketClient = require('websocket').client;
 
 var server = 'localhost:1771';
-var concurrency = 3000;
+var concurrency = 4000;
 var requestsPerSecond = 1;
 var secondsMeasured = 5;
 
@@ -15,6 +15,7 @@ var latency = new function()
 {
 	var self = this;
 	var requests = {};
+	var start = Date.now();
 	var index = 0;
 	var measurements = [];
 	var total = 0;
@@ -48,8 +49,11 @@ var latency = new function()
 		if (index > max)
 		{
 			var mean = total / measurements.length;
-			console.log('Mean latency: %s ms', mean);
+			var elapsed = Date.now() - start;
+			var rps = Math.round(1000 * index / elapsed);
+			console.log('Requests/second: %s, mean latency: %s ms', rps, mean);
 			index = 0;
+			start = Date.now();
 		}
 	}
 }
