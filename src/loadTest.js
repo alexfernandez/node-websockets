@@ -48,7 +48,7 @@ var latency = new function()
 		if (index > max)
 		{
 			var mean = total / measurements.length;
-			console.log('Mean latency: %s milliseconds', mean);
+			console.log('Mean latency: %s ms', mean);
 			index = 0;
 		}
 	}
