@@ -14,7 +14,7 @@ var server = io.listen(port);
 
 server.sockets.on('connection', function (socket)
 {
-	console.log('Accepted connection for %s from %s', request.resource, connection.remoteAddress);
+	console.log('Accepted connection for %s from %s', socket.handshake.url, socket.handshake.address.address);
 	socket.on('message', function(message)
 	{
 		console.log('Received: %s', JSON.stringify(message));
