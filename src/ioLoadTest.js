@@ -90,8 +90,8 @@ var echoClient = function(id)
 		});
 		socket.on('message', function(message)
 		{
-			console.log('Received: %s', message.utf8Data);
-			latency.end(message.utf8Data);
+			console.log('Received: %s', message);
+			latency.end(message);
 		});
 		setInterval(send, Math.round(1000 / requestsPerSecond));
 	}

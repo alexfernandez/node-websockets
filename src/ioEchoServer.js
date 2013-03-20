@@ -18,7 +18,7 @@ server.sockets.on('connection', function (socket)
 	socket.on('message', function(message)
 	{
 		console.log('Received: %s', JSON.stringify(message));
-		socket.emit(message);
+		server.sockets.emit(message);
 	});
 	socket.on('error', function(error)
 	{
