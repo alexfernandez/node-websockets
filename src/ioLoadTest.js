@@ -74,7 +74,6 @@ var echoClient = function(id)
 		    port: port,
 		}); //url);
 		socket.on('connect', connect);
-		socket.emit('message', 'hi there');
 	}
 
 	function connect()
