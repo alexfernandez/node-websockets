@@ -6,7 +6,8 @@
 
 var io = require('socket.io-client');
 
-var server = 'localhost:1771';
+var server = 'localhost';
+var port = 1771;
 var concurrency = 1;
 var requestsPerSecond = 1;
 var secondsMeasured = 5;
@@ -65,17 +66,20 @@ var echoClient = function(id)
 {
 	var self = this;
 	var counter = 0;
+	var socket;
 
 	self.start = function(id)
 	{
-		var url = 'ws://' + server + '/echo';
-		var socket = io.connect(url);
+		socket = io.connect(server, {
+		    port: port,
+		}); //url);
 		socket.on('connect', connect);
-		console.log('WebSocket client connected to ' + url);
+		socket.emit('message', 'hi there');
 	}
 
 	function connect()
 	{
+		console.log('WebSocket client connected to ' + server);
 		socket.on('error', function(error)
 		{
 			console.error("Connection error: " + error.toString());
@@ -94,9 +98,10 @@ var echoClient = function(id)
 
 	function send()
 	{
+		console.log('Sending');
 		var requestId = id + '-' + counter;
 		latency.start(requestId);
-		socket.send(requestid);
+		socket.send(requestId);
 		counter++;
 	}
 }
