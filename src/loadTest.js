@@ -8,7 +8,7 @@ var WebSocketClient = require('websocket').client;
 
 var server = 'localhost:1771';
 var concurrency = 3000;
-var requestsSecond = 1;
+var requestsPerSecond = 1;
 var secondsMeasured = 5;
 
 var latency = new function()
@@ -18,7 +18,7 @@ var latency = new function()
 	var index = 0;
 	var measurements = [];
 	var total = 0;
-	var max = concurrency * requestsSecond * secondsMeasured;
+	var max = concurrency * requestsPerSecond * secondsMeasured;
 
 	self.start = function(requestId)
 	{
@@ -92,7 +92,7 @@ var echoClient = function(id)
 			// console.log('Received: %s', message.utf8Data);
 			latency.end(message.utf8Data);
 		});
-		setInterval(send, Math.round(1000 / requestsSecond));
+		setInterval(send, Math.round(1000 / requestsPerSecond));
 	}
 
 	function send()
