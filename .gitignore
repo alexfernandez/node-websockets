@@ -16,3 +16,6 @@ npm-debug.log
 # Alex 2013-03-20: ignore vim swap files
 *.swp
 
+# Ignore node modules
+node_modules
+
