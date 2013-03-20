@@ -33,9 +33,5 @@ function connect(connection)
 	{
 		console.log('Connection closed');
 	});
-	connection.on('message', function(message)
-	{
-		console.log('We got %s', message);
-	});
 }
 
