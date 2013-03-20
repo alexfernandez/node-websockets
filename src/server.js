@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Server for websockets.
+ * Basic server for websockets.
  * (C) 2013 Alex Fernández.
  */
 
