@@ -86,10 +86,12 @@ var echoClient = function(id)
 		connection.on('error', function(error)
 		{
 			console.error("Connection error: " + error.toString());
+			connection = null;
 		});
 		connection.on('close', function()
 		{
 			console.log('Connection closed');
+			connection = null;
 		});
 		connection.on('message', function(message)
 		{
@@ -101,6 +103,10 @@ var echoClient = function(id)
 
 	function send()
 	{
+		if (!connection)
+		{
+			return;
+		}
 		var requestId = id + '-' + counter;
 		latency.start(requestId);
 		connection.sendUTF(requestId);
